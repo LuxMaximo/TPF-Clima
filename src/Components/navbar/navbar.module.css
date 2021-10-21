@@ -1,0 +1,11 @@
+.imagen{
+    filter: brightness(1.1);
+    mix-blend-mode: multiply;
+    width: 90px;
+    height: 80px;
+}
+
+.navDerecha{
+right: 154px;
+}
+

@@ -1,0 +1,60 @@
+.link{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color: seashell;
+}
+
+.divisor{
+    position: static;
+    margin-bottom: 220px;
+}
+
+.linkwsp{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color: green;
+}
+
+.linkface{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color: blue;
+}
+
+.linkIN{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color: darkcyan;
+}
+
+.linkins{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color: coral;
+}
+
+.linkgit{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color: black;
+}
+
+.linksteam{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color: black;
+}
+
+.linkPaypal{
+    padding-left: 0.9%;
+    text-decoration: none;
+    bottom: 100%;
+    color:dodgerblue;
+}
