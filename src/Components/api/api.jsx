@@ -1,19 +1,60 @@
-//import Axios from 'axios';
 import { useState, useEffect} from 'react';
 import Mapa from '../mapa/mapa';
 import Axios from 'axios';
 import {Card , InputGroup, FormControl} from 'react-bootstrap';
 import estilo from './api.module.css';
-import DatosPC from './history_bulk.json';
 
 
-export default function Api({cant , bandera}) {
+export default function Api({cant , bandera, buscado}) {
 
     const Api_Key= "6f7dafa2df9950a081c4846f01f3d281";
-    const [ latitud, setLatitud] = useState(51.507351);
-    const [ longitud, setLongitud] = useState(-0.127758);
-    const [ provincia, setProvincia] = useState([]);
+    const [ latitud, setLatitud] = useState(-24.239647919406742);
+    const [ longitud, setLongitud] = useState(-64.87316258820313);
+    const [ provincia, setProvincia] = useState();
     const [ muestra , setMuestra] = useState(20);
+    const [ encontrar , setEncontrar] = useState([]);
+   /* const [ detProvincia , setDetProvincia ] = useState(
+        [{
+        nuves: provincia.clouds,
+        coord: provincia.coord,
+        tiempo :  provincia.main,
+        nombre : provincia.name,
+        lluvia : provincia.rain,
+        nieve : provincia.snow,
+        nacion :  provincia.sys,
+        clima : provincia.weather,
+        viento : provincia.wind
+        }])*/
+        
+
+
+/*
+    function retroAlimentacionFor(){
+        setDetProvincia(provincia)
+        provincia.map((prov) => {
+       return setDetProvincia([{nombre : prov.name,
+                        clima : prov.weather,
+                        coord : prov.coord,
+                        lluvia : prov.rain,
+                        nieve : prov.snow,
+                        nacion : prov.sys,
+                        nuves : prov.clouds,
+                        tiempo : prov.main,
+                        viento: prov.wind} ] ) } )*/
+        /*provincia.forEach((prov , i) =>{
+           setDetProvincia({nombre : prov[i].name,
+                           clima : prov[i].weather,
+                           coord : prov[i].coord,
+                           lluvia : prov[i].rain,
+                           nieve : prov[i].snow,
+                           nacion : prov[i].sys,
+                           nuves : prov[i].clouds,
+                           tiempo : prov[i].main,
+                           viento: prov[i].wind},[i]); 
+        })
+        provincia.forEach((prov) =>{ console.log(prov)})
+    }*/
+    console.log(cant, "Cantidad traida del Navbar")
     let booleano = false;
     //latitud : -24.239647919406742
     //Longitud : -64.87316258820313
@@ -24,51 +65,76 @@ export default function Api({cant , bandera}) {
         .catch((err) => { console.log('el error es ', err)})
     }, [])*/
 
-    async function peticionAsync(){
+
+
+    async function apiConOrdenamiento(){
         try {
             const resultado = await Axios.get(`https://api.openweathermap.org/data/2.5/find?lat=${latitud}&lon=${longitud}&cnt=${muestra}&appid=${Api_Key}`)
-            setProvincia(resultado.data.list)
-        } catch (error) {
+            setProvincia(resultado.data.list);
+            if(bandera === true ){
+            setProvincia( provincia.sort((a, b) => {
+                if (a.name < b.name) return 1
+                if (a.name > b.name) return -1
+                return 0
+              }))}
+
+            if(bandera === false ){
+            setProvincia( resultado.data.list.sort((a, b) => {
+                if (a.name > b.name) return 1
+                if (a.name < b.name) return -1
+                return 0
+                }))}
+
+            } catch (error) {
             console.log("el error es", error)
             alert("No se hizo la peticion correctamente")
         }
     }
+
     
+ /*   
 function AcendenteAlfabetico(){
-    console.log(
         provincia.sort((a, b) => {
           if (a.name < b.name) return 1
           if (a.name > b.name) return -1
           return 0
-        }), "Probando la funcion AcendenteAlfabetico"
-      )
+        })
+      console.log("ejecutado el Acentende")
 }
 
 function DecendenteAlfabetico(){
-    console.log(
-        provincia.sort((a, b) => {
+        setProvincia(provincia.sort((a, b) => {
           if (a.name > b.name) return 1
           if (a.name < b.name) return -1
           return 0
-        }), "Probando la funcion DecendenteAlfabetico"
-      )
-}
-    useEffect(() =>{
-        peticionAsync();
-           // setProvincia(DatosPC)
-        
-        console.log(muestra , "Muestro la cantidad que hay")
-        if (booleano === false && cant !== undefined){
-            //booleano = true;
-            //setMuestra(cant)
-        }else{
-            console.log("Sin cambios" , booleano)
-        }
+        }))
+        console.log("ejecutado el Decentende")
+}*/
+console.log(provincia);
 
-        if(bandera === true){
-            AcendenteAlfabetico();
-        }else if(bandera===false){
-            DecendenteAlfabetico();
+
+
+    useEffect(() =>{
+        
+        //peticionAsync();
+        //retroAlimentacionFor();
+          //apiConOrdenamiento();
+
+
+        //Cambio la cantidad que debe mostrar
+        if (provincia== undefined){
+            peticionAsync();
+        }else{
+            if (booleano === false && cant !== undefined){
+                booleano = true;
+                setMuestra(cant);
+                console.log("Se hizo el cambio de cantidad para la API")
+                apiConOrdenamiento();
+                cant = undefined;
+                
+            }else{
+                console.log("Sin cambios" , booleano)}
+
         }
 
         return() =>{
@@ -77,7 +143,19 @@ function DecendenteAlfabetico(){
             }
             console.log("componente desmontado");
         }
-    },[cant , bandera])
+
+    },[cant , bandera , booleano, buscado])
+
+
+    async function peticionAsync(){
+        try {
+            const resultado = await Axios.get(`https://api.openweathermap.org/data/2.5/find?lat=${latitud}&lon=${longitud}&cnt=${muestra}&appid=${Api_Key}`)
+            setProvincia(resultado.data.list);
+        } catch (error) {
+            console.log("el error es", error)
+            alert("No se hizo la peticion correctamente")
+        }
+    }
 /*
     function informacionCli(){
         const respuesta = fetch(`https://api.openweathermap.org/data/2.5/find?lat=-24.239647919406742&lon=-64.87316258820313&cnt=20&appid=${Api_Key}`)
@@ -94,14 +172,8 @@ function DecendenteAlfabetico(){
         .then((info) => console.log(info))
         .catch(() => {})
     }*/
-console.log(provincia , "Muestro la provincia")
-console.log(
-    provincia.sort((a, b) => {
-      if (a.name < b.name) return 1
-      if (a.name > b.name) return -1
-      return 0
-    }), "Probando el sort "
-  )
+
+    console.log(bandera, "el booleano del navbar")
 
 return(
     <>
@@ -114,31 +186,34 @@ return(
     
     <Mapa  longitud={longitud} latitud={latitud} />
     <br/>
-
-   
-        {/* provincia && provincia.map((prov) =>{
+    <p>aaaa1</p>
+    
+    <p>aaaa2</p>
+    {provincia && provincia.map((prov) =>{
             
-             return <div>
-                 <Card key={prov.name} className={estilo.posicionCard}>
-                    <Card.Header>Clima</Card.Header>
-                    <Card.Body>
-                        <Card.Title> <p >{prov.name/*prov.name}</p></Card.Title>
-                        <Card.Text>Nivel del suelo: {prov.main.grnd_level}</Card.Text>
-                        <Card.Text>Humedad: {prov.main.humidity}</Card.Text>
-                        <Card.Text>Presion: {prov.main.pressure}</Card.Text>
-                        <Card.Text>Nivel del mar: {prov.main.sea_level}</Card.Text>
-                        <Card.Text>Temperatura actual: {prov.main.temp}</Card.Text>
-                        <Card.Text>Temperatura minima: {prov.main.temp_min}</Card.Text>
-                        <Card.Text>Temperatura maxima: {prov.main.temp_max}</Card.Text>
-                        <Card.Text>Coordenadas: Latitud {prov.lat /*prov.coord.lat} , Longitud {prov.lon /*prov.coord.lon}</Card.Text>
-                    </Card.Body>
-                </Card>
+            return (<div key={prov.id}>
+                <Card  className={estilo.posicionCard}>
+                   <Card.Header>Clima</Card.Header>
+                   <Card.Body>
+                       <Card.Title> <p>{prov.name}</p></Card.Title>
+                       <Card.Text>Nivel del suelo: {prov.main.grnd_level}</Card.Text>
+                       <Card.Text>Humedad: {prov.main.humidity}</Card.Text>
+                       <Card.Text>Presion: {prov.main.pressure}</Card.Text>
+                       <Card.Text>Nivel del mar: {prov.main.sea_level}</Card.Text>
+                       <Card.Text>Temperatura actual: {prov.main.temp}</Card.Text>
+                       <Card.Text>Temperatura minima: {prov.main.temp_min}</Card.Text>
+                       <Card.Text>Temperatura maxima: {prov.main.temp_max}</Card.Text>
+                       <Card.Text>Coordenadas: Latitud { prov.coord.lat} , Longitud {prov.coord.lon}</Card.Text>
+                   </Card.Body>
+               </Card>
 
-             </div>
-                
-                }
-            )
-            */}
+            </div>)
+               
+               })
+    }
+
+
+        
     </>
 )
 

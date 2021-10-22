@@ -11,19 +11,26 @@ import { useState } from "react";
 export default function NavbarHTML(){
 
     const [cantidad , setCantidad] = useState();
-    let bool;
-    <Api cant={cantidad} bandera={bool} />
-    console.log(cantidad , "cantidad del Navbar")
+    const [bool , setBool] = useState(true);
+    const [buscado , setBuscado] = useState("");
+
 
 function onClickBoolV(){
-    bool = true
+    setBool(true);
 }
 function onClickBoolF(){
-    bool = false
+    setBool(false);
 }
+
+function onClickBuscar(event){
+    setBuscado(event)
+}
+
 
     return(
         <>
+        <p hidden><Api cant={cantidad} bandera={bool} buscado={buscado}/></p> 
+        
             <Navbar bg="light" expand="lg">
                 <Link to="/"><img src={imagen} className={estilo.imagen} alt="no hay imagen"/></Link>
                 <Navbar.Toggle aria-controls="navbarScroll" />
@@ -43,23 +50,23 @@ function onClickBoolF(){
                 className="mr-2"
                 aria-label="buscar"
                 />
-                <Button variant="outline-success"><AiOutlineSend/></Button>
+                <Button onClick={(e) => onClickBuscar(e.target.value)} variant="outline-success"><AiOutlineSend/></Button>
             </Form>
                 </Navbar.Collapse>
                 <Nav >
                 <NavDropdown title="Orden" className={estilo.navDerecha} >
                     <NavDropdown.Item onClick={onClickBoolV}>Acendente Alfabetica </NavDropdown.Item>
-                    <NavDropdown.Item href="#action4" onClick={onClickBoolF}>Decendente Alfabetica</NavDropdown.Item>
+                    <NavDropdown.Item  onClick={onClickBoolF}>Decendente Alfabetica</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.ItemText>
                         <input 
-                         onInput={(e) => setCantidad(e.target.value)}
+                         onChange={(e) => setCantidad(e.target.value)}
                           placeholder="Cantidad a mostrar" />
                     </NavDropdown.ItemText>
                 </NavDropdown>
             </Nav>
             </Navbar>
-
+            
         </>
     )
 }

@@ -6,7 +6,7 @@ import Navbar from './Components/navbar/navbar';
 import Home from './Components/home/home.jsx';
 import About from './Components/about/about.jsx';
 import Contacto from './Components/contacto/contacto.jsx';
-import Mapa from './Components/mapa/mapa.jsx';
+import Api from './Components/api/api';
 
 
 //https://github.com/bootcamp-FI/Proyecto-Final
@@ -17,7 +17,7 @@ export default function App() {
       <Switch>
 
         <Route exact path='/'>
-          <Home/>
+          <Home />
         </Route>
 
         <Route exact path='/about' >
@@ -28,8 +28,8 @@ export default function App() {
           <Contacto/>
         </Route>
 
-        <Route exact path='/map'>
-          <Mapa/>
+        <Route exact path='/api'>
+          <Api/>
         </Route>
 
 
